@@ -1,0 +1,61 @@
+//  GetPetitions.swift
+//  LearningCombine
+//  Created by Nanu Jogi on 03/07/19.
+//  Copyright © 2019 Greenleaf Software. All rights reserved.
+
+import Foundation
+import SwiftUI
+import Combine
+
+class GetPetitions: BindableObject {
+    
+    let url = "https://api.whitehouse.gov/v1/petitions.json?limit=20"
+    // PassthroughSubject does not maintain any state, just passes through provided values.
+    
+    var didChange = PassthroughSubject<Void, Never>()
+    
+    // models is an array of Petition
+    var models: [Petition] = [] {
+        didSet {
+            didChange.send(()) // this send() call will send values to any subscribers.
+        }
+    }
+
+    // fetch func will be used in .onAppear inside
+    func fetch() {
+        if let url = URL(string: url) {
+            
+            // Create an URLSession.shared.dataTaskPublisher.
+            let remoteDataPublisher = URLSession.shared.dataTaskPublisher(for: url)
+                // the dataTaskPublisher output combination is (data: Data, response: URLResponse)
+                
+                // using different operators map, decode
+                .map({ (inputTuple) -> Data in
+                    return inputTuple.data
+                })
+                
+                .decode(type: Petitions.self, decoder: JSONDecoder())
+            
+            // validate
+            let _ = remoteDataPublisher
+                
+                // Whatever received just run it on Main Thread.
+                // If we put it in end after .sink it gives error.
+                
+                .receive(on: RunLoop.main) // Was giving error because the thread of fetching petition was running in backgroup & now once its completed we want to move it to main thread. So added this operator here.
+                
+                .sink(receiveCompletion: { fini in
+                    print(".sink() received the completion", String(describing: fini))
+
+                }, receiveValue: { someValue in
+                    self.models = someValue.results // save it in our models.
+//                    print(".sink() receiveValue \(someValue)\n")
+                })
+
+            print(type(of: remoteDataPublisher.self))
+            // Result of above print:
+            // Decode<Map<DataTaskPublisher, Data>, Petitions, JSONDecoder>
+            print("Petitions received & Saved in models")
+        }
+    }
+} // end of class GetPetitions
