@@ -18,11 +18,14 @@ struct ContentView : View {
                         PetitionRow(p: getp)
                     }
                 }
-                } // end of NavigationView
                 .navigationBarTitle(Text("Petitions"))
+                } // end of NavigationView
+            
             } // end of Group
+
             .onAppear(perform: {
                 self.store.fetch() }) // here we use fetch()
+
     } // end of View
 }
 
