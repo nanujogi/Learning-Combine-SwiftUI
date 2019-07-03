@@ -14,7 +14,7 @@ struct ContentView : View {
         Group {
             NavigationView {
                 List (store.models) { getp in
-                    NavigationButton(destination: Details(modelDetail: getp)) {
+                    NavigationLink(destination: Details(modelDetail: getp)) {
                         PetitionRow(p: getp)
                     }
                 }
