@@ -21,7 +21,7 @@ class GetPetitions: BindableObject {
         }
     }
 
-    // fetch func will be used in .onAppear inside
+    // fetch func will be used in .onAppear inside ContentView.swift
     func fetch() {
         if let url = URL(string: url) {
             
@@ -35,6 +35,8 @@ class GetPetitions: BindableObject {
                 })
                 
                 .decode(type: Petitions.self, decoder: JSONDecoder())
+                
+                .eraseToAnyPublisher() // cleans up the type signature of the property getting asigned to the chain of operators
             
             // validate
             let _ = remoteDataPublisher
@@ -54,7 +56,8 @@ class GetPetitions: BindableObject {
 
             print(type(of: remoteDataPublisher.self))
             // Result of above print:
-            // Decode<Map<DataTaskPublisher, Data>, Petitions, JSONDecoder>
+            // AnyPublisher<Petitions, Error>
+            
             print("Petitions received & Saved in models")
         }
     }
