@@ -9,7 +9,7 @@ import Combine
 
 class GetPetitions: BindableObject {
     
-    let url = "https://api.whitehouse.gov/v1/petitions.json?limit=20"
+    let url = "https://api.whitehouse.gov/v1/petitions.json?limit=15"
     // PassthroughSubject does not maintain any state, just passes through provided values.
     
     var didChange = PassthroughSubject<Void, Never>()
@@ -40,7 +40,7 @@ class GetPetitions: BindableObject {
             let _ = remoteDataPublisher
                 
                 // Whatever received just run it on Main Thread.
-                // If we put it in end after .sink it gives error.
+                // If we put it in end after .sink gives error.
                 
                 .receive(on: RunLoop.main) // Was giving error because the thread of fetching petition was running in backgroup & now once its completed we want to move it to main thread. So added this operator here.
                 

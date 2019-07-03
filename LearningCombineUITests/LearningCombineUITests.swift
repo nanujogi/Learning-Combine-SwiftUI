@@ -1,10 +1,7 @@
 //
 //  LearningCombineUITests.swift
 //  LearningCombineUITests
-//
-//  Created by Nanu Jogi on 03/07/19.
-//  Copyright © 2019 Greenleaf Software. All rights reserved.
-//
+
 
 import XCTest
 

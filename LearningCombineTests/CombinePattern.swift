@@ -1,10 +1,7 @@
 //
 //  CombinePattern.swift
 //  LearningCombineTests
-//
-//  Created by Nanu Jogi on 03/07/19.
-//  Copyright © 2019 Greenleaf Software. All rights reserved.
-//
+
 
 import Foundation
 import XCTest
@@ -30,12 +27,12 @@ class CombinePattern: XCTestCase {
     }
     
     let testURLString = "https://api.whitehouse.gov/v1/petitions.json?limit=5"
-    //    let testURLString = "http://ip.jsontest.com"
+//    let testURLString = "http://ip.jsontest.com"
     
     // matching the data structre return from above site
-    struct IPInfo: Codable {
-        var title: String
-    }
+//    struct IPInfo: Codable {
+//        var title: String
+//    }
     
     override func setUp() {
         self.testURL = URL(string: testURLString)
