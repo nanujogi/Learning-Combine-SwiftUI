@@ -19,7 +19,7 @@ class GetPetitions: BindableObject {
     var models: [Petition] = [] {
         didSet {
             DispatchQueue.main.async {
-                self.didChange.send(()) // this send() call will send values to subscribers.
+                self.didChange.send() // this send() call will send values to subscribers.
             }
         }
     }
