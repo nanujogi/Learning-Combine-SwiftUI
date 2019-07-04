@@ -68,4 +68,27 @@ class CombinePattern: XCTestCase {
         
     }
     
+    func testSimplePipeline() {
+        let _ = Just(5)
+        .map{ (value) -> String in
+            switch value {
+            case _ where value < 1:
+                return "none"
+            case _ where value == 1:
+                return "one"
+            case _ where value == 2:
+                return "couple"
+            case _ where value == 3:
+                return "few"
+            case _ where value > 8:
+                return "many"
+            default:
+                return "some"
+            }
+        }
+        .sink { (receivedValue) in
+            print("The end result was \(receivedValue)")
+        }
+    }
+    
 }

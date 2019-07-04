@@ -38,21 +38,14 @@ class GetPetitions: BindableObject {
                 })
                 
                 .decode(type: Petitions.self, decoder: JSONDecoder())
+                // .receive(on: RunLoop.main)
                 
                 // cleans up the type signature of the property
                 // getting asigned to the chain of operators
                 .eraseToAnyPublisher()
             
-            // validate
+            // Complete sink has two closures
             let _ = remoteDataPublisher
-                
-                // Whatever received just run it on Main Thread.
-                // If we put it in end after .sink gives error.
-                
-              //  .receive(on: RunLoop.main)
-                // Was giving error because the thread of fetching petition was running in
-                // backgroup & now once its completed we want to move it to main thread.
-                // So added this operator here.
                 
                 .sink(receiveCompletion: { fini in
                     print(".sink() receiveCompletion triggers", String(describing: fini))
