@@ -16,11 +16,12 @@ class GetPetitions: BindableObject {
     // PassthroughSubject does not maintain any state, just passes through provided values.
     
     // models is an array of Petition
-    var models: [Petition] = [] {
+    var models: [Petition] = []
+    {
         didSet {
-            DispatchQueue.main.async {
+            //DispatchQueue.main.async {
                 self.didChange.send() // this send() call will send values to subscribers.
-            }
+           //}
         }
     }
     
@@ -33,33 +34,28 @@ class GetPetitions: BindableObject {
                 // the dataTaskPublisher output combination is (data: Data, response: URLResponse)
                 
                 // using different operators map, decode
+ //               .map {$0.data}
                 .map({ (inputTuple) -> Data in
                     return inputTuple.data
                 })
-                
                 .decode(type: Petitions.self, decoder: JSONDecoder())
-                // .receive(on: RunLoop.main)
-                
-                // cleans up the type signature of the property
-                // getting asigned to the chain of operators
-                .eraseToAnyPublisher()
+                .map{$0.results}
+                .receive(on: DispatchQueue.main)
+                .eraseToAnyPublisher()  // cleans up the type signature of the property
             
             // Complete sink has two closures
             let _ = remoteDataPublisher
-                
                 .sink(receiveCompletion: { fini in
-                    print(".sink() receiveCompletion triggers", String(describing: fini))
-                    
+                    switch fini {
+                    case .finished :
+                        print(".sink() receiveCompletion", String(describing: fini))
+                    case .failure:
+                        print("Error in receiveCompletion")
+                    }
                 }, receiveValue: { someValue in
-                    self.models = someValue.results // save it in our models.
-                    //                    print(".sink() receiveValue \(someValue)\n")
+                    self.models = someValue // save it in our models.
+                    // print(".sink() receiveValue \(someValue)\n")
                 })
-            
-            print(type(of: remoteDataPublisher.self))
-            // Result of above print:
-            // AnyPublisher<Petitions, Error>
-            
-            print("Petitions received & Saved in models")
         }
     }
 } // end of class GetPetitions

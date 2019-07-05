@@ -90,5 +90,4 @@ class CombinePattern: XCTestCase {
             print("The end result was \(receivedValue)")
         }
     }
-    
 }
