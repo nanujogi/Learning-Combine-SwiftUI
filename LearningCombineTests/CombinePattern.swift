@@ -90,4 +90,41 @@ class CombinePattern: XCTestCase {
             print("The end result was \(receivedValue)")
         }
     }
+    
+    func testUnderstand() {
+        
+        enum WeatherError: Error {
+            case thingsJustHappen
+        }
+        
+        let weatherPublisher = PassthroughSubject<Int, Error>()
+        let subscriber = weatherPublisher
+            .filter { $0 > 25 }
+            .sink { value in
+                print("A summer day of \(value) C")
+        }
+        
+        let anotherSubscriber = weatherPublisher.handleEvents(receiveSubscription: { (subscription) in
+            print("New Subscription \(subscription)")
+        }, receiveOutput: { (output) in
+            print("New Value: Output \(output)")
+        }, receiveCompletion: { (error) in
+            print("Subscription completed with poetnetion error \(error)")
+        }, receiveCancel: {
+            print("Subscription cancelled")
+        }).sink { (value) in
+            print("Subscriber received value: \(value)")
+        }
+        
+        weatherPublisher.send(10)
+        weatherPublisher.send(20)
+        weatherPublisher.send(24)
+        weatherPublisher.send(26)
+        weatherPublisher.send(28)
+        weatherPublisher.send(30)
+        
+        weatherPublisher.send(completion:
+            Subscribers.Completion.failure(WeatherError.thingsJustHappen))
+        weatherPublisher.send(18)
+    }
 }

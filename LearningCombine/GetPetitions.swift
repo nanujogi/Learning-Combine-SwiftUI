@@ -38,6 +38,7 @@ class GetPetitions: BindableObject {
                 .map({ (inputTuple) -> Data in
                     return inputTuple.data
                 })
+                
                 .decode(type: Petitions.self, decoder: JSONDecoder())
                 .map{$0.results}
                 .receive(on: DispatchQueue.main)
@@ -54,7 +55,7 @@ class GetPetitions: BindableObject {
                     }
                 }, receiveValue: { someValue in
                     self.models = someValue // save it in our models.
-                    // print(".sink() receiveValue \(someValue)\n")
+                    //print(".sink() receiveValue \(someValue)\n")
                 })
         }
     }

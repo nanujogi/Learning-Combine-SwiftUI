@@ -45,8 +45,9 @@ struct PetitionRow: View {
 
             Text(p.url)
                 .font(.system(size: 9))
-                .lineLimit(nil)
                 .foregroundColor(Color.blue)
+                .lineLimit(nil)
+
         }
     }
 }
