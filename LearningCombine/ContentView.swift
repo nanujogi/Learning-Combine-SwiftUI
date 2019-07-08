@@ -3,8 +3,23 @@
 //  LearningCombine
 //  Created by Nanu Jogi on 03/07/19.
 
+import Foundation
 import SwiftUI
 import Combine
+
+struct LoadingView: UIViewRepresentable {
+    typealias UIViewType = UIActivityIndicatorView
+    
+    func makeUIView(context: UIViewRepresentableContext<LoadingView>) -> UIActivityIndicatorView {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.startAnimating()
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<LoadingView>) {
+        // Todo
+    }
+}
 
 struct ContentView : View {
 
@@ -12,6 +27,11 @@ struct ContentView : View {
     
     var body: some View {
         Group {
+            if store.models.isEmpty {
+                LoadingView()
+            }
+            else {
+            
             NavigationView {
                 List (store.models) { getp in
                     NavigationLink(destination: Details(modelDetail: getp)) {
@@ -20,8 +40,11 @@ struct ContentView : View {
                 }
                 .navigationBarTitle(Text("Petitions"))
                 } // end of NavigationView
+                
+            }
             
             } // end of Group
+        
 
             .onAppear(perform: {
                 self.store.fetch() }) // here we use fetch()
@@ -51,3 +74,5 @@ struct PetitionRow: View {
         }
     }
 }
+
+
