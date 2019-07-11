@@ -7,48 +7,27 @@ import Foundation
 import SwiftUI
 import Combine
 
-struct LoadingView: UIViewRepresentable {
-    typealias UIViewType = UIActivityIndicatorView
-    
-    func makeUIView(context: UIViewRepresentableContext<LoadingView>) -> UIActivityIndicatorView {
-        let view = UIActivityIndicatorView(style: .medium)
-        view.startAnimating()
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<LoadingView>) {
-        // Todo
-    }
-}
-
 struct ContentView : View {
-
+    
     @ObjectBinding var store: GetPetitions
     
     var body: some View {
         Group {
             if store.models.isEmpty {
                 LoadingView()
-            }
-            else {
-            
-            NavigationView {
-                List (store.models) { getp in
-                    NavigationLink(destination: Details(modelDetail: getp)) {
-                        PetitionRow(p: getp)
+            } else {
+                NavigationView {
+                    List (store.models) { getp in
+                        NavigationLink(destination: Details(modelDetail: getp)) {
+                            PetitionRow(p: getp)
+                        }
                     }
-                }
-                .navigationBarTitle(Text("Petitions"))
+                    .navigationBarTitle(Text("Petitions"))
                 } // end of NavigationView
-                
             }
-            
-            } // end of Group
-        
-
+        } // end of Group
             .onAppear(perform: {
                 self.store.fetch() }) // here we use fetch()
-
     } // end of View
 }
 
@@ -58,21 +37,34 @@ struct PetitionRow: View {
     
     var body: some View {
         VStack (alignment: .leading) {
-
+            
             Text(p.title)
-
+            
             Text(p.body)
                 .font(.subheadline)
                 .color(Color.gray)
                 .lineLimit(2)
-
+            
             Text(p.url)
                 .font(.system(size: 9))
                 .foregroundColor(Color.blue)
                 .lineLimit(nil)
-
+            
         }
     }
 }
 
-
+struct LoadingView: UIViewRepresentable {
+    typealias UIViewType = UIActivityIndicatorView
+    
+    func makeUIView(context: UIViewRepresentableContext<LoadingView>) -> UIActivityIndicatorView {
+        let view = UIActivityIndicatorView(style: .medium)
+        view.sizeToFit()
+        view.startAnimating()
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<LoadingView>) {
+        // Todo
+    }
+}

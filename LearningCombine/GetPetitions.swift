@@ -45,7 +45,7 @@ class GetPetitions: BindableObject {
                 .eraseToAnyPublisher()  // cleans up the type signature of the property
             
             // Complete sink has two closures
-            let _ = remoteDataPublisher
+             let _ = remoteDataPublisher
                 .sink(receiveCompletion: { fini in
                     switch fini {
                     case .finished :
