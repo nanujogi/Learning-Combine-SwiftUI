@@ -4,6 +4,7 @@
 
 
 import Foundation
+import UIKit
 import XCTest
 import Combine
 
@@ -318,7 +319,7 @@ class CombinePattern: XCTestCase {
                 // print(type(of: data)) // Int
                 return Just(data)
         }
-            //            .flatMap {Just($0)}
+            // .flatMap {Just($0)}
             .filter { $0.isMultiple(of: 2) }
             .dropFirst(3) // omits the specified number of elements before republishing subsequent elements.
             .removeDuplicates() // publishes only elements that don't match the previous element
@@ -368,7 +369,4 @@ class CombinePattern: XCTestCase {
                 print(value)
             })
     }
-    
 }
-
-

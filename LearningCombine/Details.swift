@@ -5,6 +5,7 @@ import SwiftUI
 struct Details : View {
     
     var modelDetail: Petition
+    @State private var showsAlert: Bool = false
     
     var body: some View {
         VStack {
@@ -14,9 +15,18 @@ struct Details : View {
                 .padding()
                 .lineLimit(nil)
             Text("Signature Count: \(modelDetail.signatureCount)")
+            
+            Button("Shows Alert") {
+                self.showsAlert = true
+            }
+            .presentation($showsAlert) {
+                Alert(title: Text(modelDetail.title), message: Text(modelDetail.body), dismissButton: .default(Text("Exit")))
+            }
             Spacer()
         }
-
     }
 }
+
+
+
 
