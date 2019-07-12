@@ -1,7 +1,7 @@
 
 Thank you Paul Hudson for writing [Hacking with Swift](https://www.hackingwithswift.com/read). Infact all his books Rocks! :+1:
 
-Thank you Joe Heck for writing Using Combine https://heckj.github.io/swiftui-notes/ it rocks :+1:
+Thank you Joe Heck for writing [**Using Combine**](https://heckj.github.io/swiftui-notes/) it rocks :+1:
 
 Made this small simple little app while understanding Combine. 
 
