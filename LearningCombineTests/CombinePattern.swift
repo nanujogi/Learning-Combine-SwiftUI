@@ -369,4 +369,25 @@ class CombinePattern: XCTestCase {
                 print(value)
             })
     }
+    
+    // receive data on another queue.
+    
+    func testRog() {
+        let subject = PassthroughSubject<Int, Never>()
+        let api = subject.eraseToAnyPublisher()
+        let cancellable = api
+            .receive(on: DispatchQueue.global())
+            .flatMap { value -> AnyPublisher<String, Never> in
+                print("Flat mapped \(value) - main thread? \(Thread.isMainThread)")
+                return Just("\(value)").eraseToAnyPublisher()
+        }
+        .receive(on: RunLoop.main)
+            .sink(receiveCompletion: { _ in
+                print("Completed - main thread? \(Thread.isMainThread)")
+            }, receiveValue: { value in
+                print("Received \(value) - main thread? \(Thread.isMainThread)")
+            })
+        
+        subject.send(99)
+    }
 }

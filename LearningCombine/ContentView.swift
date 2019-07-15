@@ -52,6 +52,8 @@ struct PetitionRow: View {
             
         }
     }
+    
+
 }
 
 struct LoadingView: UIViewRepresentable {
@@ -63,6 +65,7 @@ struct LoadingView: UIViewRepresentable {
         view.startAnimating()
         return view
     }
+    
     
     func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<LoadingView>) {
         // Todo
