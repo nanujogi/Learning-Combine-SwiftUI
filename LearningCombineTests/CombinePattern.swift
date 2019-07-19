@@ -414,8 +414,8 @@ class CombinePattern: XCTestCase {
         let simpleControlledPublisher = PassthroughSubject<Data, Error>()
        
         let _ = simpleControlledPublisher
-            .flatMap { value in // takes a String in and returns a Publisher
-                return Just(value)
+            .flatMap { data in // takes a String in and returns a Publisher
+                return Just(data)
                     .decode(type: Hub.self, decoder: JSONDecoder())
         }
         .sink(receiveCompletion: { fini in
