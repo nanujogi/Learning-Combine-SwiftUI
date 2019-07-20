@@ -92,43 +92,43 @@ class CombinePattern: XCTestCase {
         }
     }
     
-    func testUnderstand() {
-        
-        enum WeatherError: Error {
-            case thingsJustHappen
-        }
-        
-        let weatherPublisher = PassthroughSubject<Int, Error>()
-        let subscriber = weatherPublisher
-            .filter { $0 > 25 }
-            .sink { value in
-                print("A summer day of \(value) C")
-        }
-        
-        let anotherSubscriber = weatherPublisher.handleEvents(receiveSubscription: { (subscription) in
-            print("New Subscription \(subscription)")
-        }, receiveOutput: { (output) in
-            print("New Value: Output \(output)")
-        }, receiveCompletion: { (error) in
-            print("Subscription completed with poetnetion error \(error)")
-        }, receiveCancel: {
-            print("Subscription cancelled")
-        }).sink { (value) in
-            print("Subscriber received value: \(value)")
-        }
-        
-        weatherPublisher.send(10)
-        weatherPublisher.send(20)
-        weatherPublisher.send(24)
-        weatherPublisher.send(26)
-        weatherPublisher.send(28)
-        weatherPublisher.send(30)
-        
-        weatherPublisher.send(completion:
-            Subscribers.Completion.failure(WeatherError.thingsJustHappen))
-        weatherPublisher.send(18)
-    }
-    
+//    func testUnderstand() {
+//
+//        enum WeatherError: Error {
+//            case thingsJustHappen
+//        }
+//
+//        let weatherPublisher = PassthroughSubject<Int, Error>()
+//        let subscriber = weatherPublisher
+//            .filter { $0 > 25 }
+//            .sink { value in
+//                print("A summer day of \(value) C")
+//        }
+//
+//        let anotherSubscriber = weatherPublisher.handleEvents(receiveSubscription: { (subscription) in
+//            print("New Subscription \(subscription)")
+//        }, receiveOutput: { (output) in
+//            print("New Value: Output \(output)")
+//        }, receiveCompletion: { (error) in
+//            print("Subscription completed with poetnetion error \(error)")
+//        }, receiveCancel: {
+//            print("Subscription cancelled")
+//        }).sink { (value) in
+//            print("Subscriber received value: \(value)")
+//        }
+//
+//        weatherPublisher.send(10)
+//        weatherPublisher.send(20)
+//        weatherPublisher.send(24)
+//        weatherPublisher.send(26)
+//        weatherPublisher.send(28)
+//        weatherPublisher.send(30)
+//
+//        weatherPublisher.send(completion:
+//            Subscribers.Completion.failure(WeatherError.thingsJustHappen))
+//        weatherPublisher.send(18)
+//    }
+//
     func testCodes() {
         
         let publisher = Just(28)
@@ -152,25 +152,25 @@ class CombinePattern: XCTestCase {
         //        }
     }
     
-    func testCodes2() {
-        
-        enum RequestError: Error {
-            case sessionError(error: Error)
-        }
-        
-        let URLPublisher = PassthroughSubject<URL, RequestError>()
-        URLPublisher.flatMap { requestURL in
-            return URLSession.shared.dataTaskPublisher(for: requestURL)
-                .mapError { error -> RequestError in
-                    return RequestError.sessionError(error: error)
-            }
-        }
-        .sink { result in
-            print("Request finished!")
-            _ = UIImage(data: result.data)
-        }
-        URLPublisher.send(URL(string: "https://httpbin.org/image/jpeg")!)
-    }
+//    func testCodes2() {
+//
+//        enum RequestError: Error {
+//            case sessionError(error: Error)
+//        }
+//
+//        let URLPublisher = PassthroughSubject<URL, RequestError>()
+//        URLPublisher.flatMap { requestURL in
+//            return URLSession.shared.dataTaskPublisher(for: requestURL)
+//                .mapError { error -> RequestError in
+//                    return RequestError.sessionError(error: error)
+//            }
+//        }
+//        .sink { result in
+//            print("Request finished!")
+//            _ = UIImage(data: result.data)
+//        }
+//        URLPublisher.send(URL(string: "https://httpbin.org/image/jpeg")!)
+//    }
     
     func testCodes3() {
         struct FormViewModel {
@@ -197,66 +197,66 @@ class CombinePattern: XCTestCase {
         
     }
     
-    func testCodes4() {
-        /*:
-         [Previous](@previous)
-         ## Debugging
-         Operators which help to debug Combine streams and implementations.
-         
-         More info: [https://www.avanderlee.com/debugging/combine-swift/‎](https://www.avanderlee.com/debugging/combine-swift/‎)
-         */
-        
-        enum ExampleError: Swift.Error {
-            case somethingWentWrong
-        }
-        
-        /*:
-         #### Handling events
-         Can be used combined with breakpoints for further insights.
-         */
-        let subject = PassthroughSubject<String, ExampleError>()
-        let subscription = subject.handleEvents(receiveSubscription: { (subscription) in
-            print("Receive subscription")
-        }, receiveOutput: { output in
-            print("Received output: \(output)")
-        }, receiveCompletion: { _ in
-            print("Receive completion")
-        }, receiveCancel: {
-            print("Receive cancel")
-        }, receiveRequest: { demand in
-            print("Receive request: \(demand)")
-        }).sink { _ in }
-        
-        subject.send("Hello!")
-        subscription.cancel()
-        
-        // Prints out:
-        // Receive request: unlimited
-        // Receive subscription
-        // Received output: Hello!
-        // Receive cancel
-        
-        //subject.send(completion: .finished)
-        
-        /*:
-         #### Print
-         Using the print operator to log messages for all publishing events.
-         */
-        
-        let printSubscription = subject.print("Print example").sink { _ in }
-        
-        subject.send("Hello!")
-        printSubscription.cancel()
-        
-        // Prints out:
-        // Print example: receive subscription: (PassthroughSubject)
-        // Print example: request unlimited
-        // Print example: receive value: (Hello!)
-        // Print example: receive cancel
-        
-        //: [Next](@next)
-        
-    }
+//    func testCodes4() {
+//        /*:
+//         [Previous](@previous)
+//         ## Debugging
+//         Operators which help to debug Combine streams and implementations.
+//
+//         More info: [https://www.avanderlee.com/debugging/combine-swift/‎](https://www.avanderlee.com/debugging/combine-swift/‎)
+//         */
+//
+//        enum ExampleError: Swift.Error {
+//            case somethingWentWrong
+//        }
+//
+//        /*:
+//         #### Handling events
+//         Can be used combined with breakpoints for further insights.
+//         */
+//        let subject = PassthroughSubject<String, ExampleError>()
+//        let subscription = subject.handleEvents(receiveSubscription: { (subscription) in
+//            print("Receive subscription")
+//        }, receiveOutput: { output in
+//            print("Received output: \(output)")
+//        }, receiveCompletion: { _ in
+//            print("Receive completion")
+//        }, receiveCancel: {
+//            print("Receive cancel")
+//        }, receiveRequest: { demand in
+//            print("Receive request: \(demand)")
+//        }).sink { _ in }
+//
+//        subject.send("Hello!")
+//        subscription.cancel()
+//
+//        // Prints out:
+//        // Receive request: unlimited
+//        // Receive subscription
+//        // Received output: Hello!
+//        // Receive cancel
+//
+//        //subject.send(completion: .finished)
+//
+//        /*:
+//         #### Print
+//         Using the print operator to log messages for all publishing events.
+//         */
+//
+//        let printSubscription = subject.print("Print example").sink { _ in }
+//
+//        subject.send("Hello!")
+//        printSubscription.cancel()
+//
+//        // Prints out:
+//        // Print example: receive subscription: (PassthroughSubject)
+//        // Print example: request unlimited
+//        // Print example: receive value: (Hello!)
+//        // Print example: receive cancel
+//
+//        //: [Next](@next)
+//
+//    }
     
     func testArlindCode1() {
         let publisher = Just("Combine Swift")
@@ -392,8 +392,22 @@ class CombinePattern: XCTestCase {
     }
 
     // How to read detailDetail?
-    // ❌ test will be successful but not able to read detailDetail its an failure
+    // ❌ Beta 3 test will be successful but not able to read detailDetail its an failure
+    // ❌ Beta 4 test will be successful but no data is received
+    
     func testJsonData() {
+        
+        let jsondata = """
+            {
+                "id": 948783,
+                "title": "Pay online using your Visa Signature or Visa Infinite Card and get 10% cashback up to ₹100 on one transaction during offer period.",
+                "off_percent": "",
+                "store": "Amazon",
+                "current_price": 0,
+                "deal_detail": "<p><a href=\"https://links.desidime.com?ref=forums&url=https://www.amazon.in/b/%3Fnode=15569417031\" target=\"_blank\" rel=\"nofollow\">https://www.amazon.in/b/?node=15569...31</a><br>\nFrequently Asked Question:<br>\n1. What is the offer?<br>\nPay online using your Visa Signature or Visa Infinite Card and get 10% cashback up to ₹100 on one transaction during offer period.</p>\n<p>2. What is the offer period?<br>\nDecember 20, 2018 to <del>December 31, 2018</del> September 30th 2019 (both days inclusive).</p>\n<p>3. Is there a minimum order value?<br>\nNo, there is no minimum order value.</p>\n<p>4. Is the offer available on all products?<br>\nThis offer is valid on mobile recharges, postpaid bill payments, utility payments (such as electricity, landline, broadband, gas, <span class=\"caps\">DTH</span> payments) as well as all purchases on Amazon.in except Amazon Pay Gift Cards, Amazon Pay balance, gold coins, <span class=\"caps\">RBL</span> bank cards, bank cards, Prime membership, precious jewelry, Kindle Unlimited Subscription, Kindle e-books, select Samsung mobile and tablet devices, tickets (travel, movie and event) and hotel bookings.</p>\n<p>5. When and where will the cashback be credited?<br>\nCashback will be credited as Amazon Pay balance within 3 business days from the date of shipping of the order placed on which the cashback offer is applied. However, for orders involving a product eligible for exchange and/or no-cost <span class=\"caps\">EMI</span>, the cashback will be provided within 20 days from the date of shipping (provided the order is not canceled, rejected or returned.)</p>\n<p>6.Is this offer available for Pay on Delivery?<br>\nNo, this offer cannot be used for Pay on Delivery, card on delivery or pay link on delivery.</p>\n<p>7.Can I place an order with multiple modes of payment?<br>\nNo, the complete payment for the Order(s) must be made using Visa Signature or Visa Infinite Card.</p>"
+            }
+        """.data(using: .utf32)
+                
         
         struct Hub: Codable {
             let id: Int
@@ -424,16 +438,6 @@ class CombinePattern: XCTestCase {
             print(".sink() received \(stringValue)")
         })
         
-        let jsondata = """
-    {
-        "id": 948783,
-        "title": "Pay online using your Visa Signature or Visa Infinite Card and get 10% cashback up to ₹100 on one transaction during offer period.",
-        "off_percent": "",
-        "store": "Amazon",
-        "current_price": 0,
-        "deal_detail": "<p><a href=\"https://links.desidime.com?ref=forums&url=https://www.amazon.in/b/%3Fnode=15569417031\" target=\"_blank\" rel=\"nofollow\">https://www.amazon.in/b/?node=15569...31</a><br>\nFrequently Asked Question:<br>\n1. What is the offer?<br>\nPay online using your Visa Signature or Visa Infinite Card and get 10% cashback up to ₹100 on one transaction during offer period.</p>\n<p>2. What is the offer period?<br>\nDecember 20, 2018 to <del>December 31, 2018</del> September 30th 2019 (both days inclusive).</p>\n<p>3. Is there a minimum order value?<br>\nNo, there is no minimum order value.</p>\n<p>4. Is the offer available on all products?<br>\nThis offer is valid on mobile recharges, postpaid bill payments, utility payments (such as electricity, landline, broadband, gas, <span class=\"caps\">DTH</span> payments) as well as all purchases on Amazon.in except Amazon Pay Gift Cards, Amazon Pay balance, gold coins, <span class=\"caps\">RBL</span> bank cards, bank cards, Prime membership, precious jewelry, Kindle Unlimited Subscription, Kindle e-books, select Samsung mobile and tablet devices, tickets (travel, movie and event) and hotel bookings.</p>\n<p>5. When and where will the cashback be credited?<br>\nCashback will be credited as Amazon Pay balance within 3 business days from the date of shipping of the order placed on which the cashback offer is applied. However, for orders involving a product eligible for exchange and/or no-cost <span class=\"caps\">EMI</span>, the cashback will be provided within 20 days from the date of shipping (provided the order is not canceled, rejected or returned.)</p>\n<p>6.Is this offer available for Pay on Delivery?<br>\nNo, this offer cannot be used for Pay on Delivery, card on delivery or pay link on delivery.</p>\n<p>7.Can I place an order with multiple modes of payment?<br>\nNo, the complete payment for the Order(s) must be made using Visa Signature or Visa Infinite Card.</p>"
-    }
-""".data(using: .utf8)
         simpleControlledPublisher.send(jsondata!)
         simpleControlledPublisher.send(completion: .finished)
     }
@@ -455,5 +459,56 @@ class CombinePattern: XCTestCase {
         myTown.changePopulation(by: 500)
         myTown.printDescription()
     }
+    
+        func testjsonhtmldecode() {
+            
+            struct Models: Codable{
+                let id: Int
+                let title, offPercent, store: String
+                let currentPrice: Int
+                let dealDetail: String
+                
+                enum CodingKeys: String, CodingKey {
+                    case id, title
+                    case offPercent = "off_percent"
+                    case store
+                    case currentPrice = "current_price"
+                    case dealDetail = "deal_detail"
+                }
+            }
+            
+            // setup
+            let myURL = URL(string: "http://www.grenleaf.com/getjson.txt") // whole chain fails with completion/error sent from dataTaskPublisher
+            let expectation = XCTestExpectation(description: "Download from \(String(describing: myURL))")
+            let remoteDataPublisher = URLSession.shared.dataTaskPublisher(for: myURL!)
+                // the dataTaskPublisher output combination is (data: Data, response: URLResponse)
+                .map { $0.data }
+                .decode(type: Models.self, decoder: JSONDecoder())
+                .eraseToAnyPublisher()
+
+                // validate
+                .sink(receiveCompletion: { fini in
+                    print(".sink() received the completion", String(describing: fini))
+                    switch fini {
+                    case .finished: XCTFail()
+                    case .failure(let anError):
+                        print("received error: ", anError)
+                        // URL doesn't exist, so a failure should be triggered
+                        // normally, the error description would be "A server with the specified hostname could not be found."
+                        // but out mocking system screws with the errors
+                        // XCTAssertEqual(anError.localizedDescription, "A server with the specified hostname could not be found.")
+                        expectation.fulfill()
+                    }
+                }, receiveValue: { someValue in
+    //                XCTAssertNotNil(someValue)
+                    XCTFail("Should not have received a value with the failed URL")
+                    print(".sink() received \(someValue)")
+                })
+
+            XCTAssertNotNil(remoteDataPublisher)
+            wait(for: [expectation], timeout: 5.0)
+        }
+
+    
 }
 

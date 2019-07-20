@@ -10,9 +10,11 @@ import Combine
 
 class GetPetitions: BindableObject {
     
+    typealias PublisherType = PassthroughSubject<Void, Never>
+    
     let url = "https://api.whitehouse.gov/v1/petitions.json?limit=15"
     
-    var didChange = PassthroughSubject<Void, Never>()
+    var willChange  = PassthroughSubject<Void, Never>()
     // PassthroughSubject does not maintain any state, just passes through provided values.
     
     // models is an array of Petition
@@ -20,7 +22,7 @@ class GetPetitions: BindableObject {
     {
         didSet {
             //DispatchQueue.main.async {
-                self.didChange.send() // this send() call will send values to subscribers.
+                self.willChange.send() // this send() call will send values to subscribers.
            //}
         }
     }
