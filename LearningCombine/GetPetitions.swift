@@ -22,8 +22,8 @@ class GetPetitions: BindableObject {
     {
         didSet {
             //DispatchQueue.main.async {
-                self.willChange.send() // this send() call will send values to subscribers.
-           //}
+            self.willChange.send() // this send() call will send values to subscribers.
+            //}
         }
     }
     
@@ -36,7 +36,7 @@ class GetPetitions: BindableObject {
                 // the dataTaskPublisher output combination is (data: Data, response: URLResponse)
                 
                 // using different operators map, decode
- //               .map {$0.data}
+                //               .map {$0.data}
                 .map({ (inputTuple) -> Data in
                     return inputTuple.data
                 })
@@ -46,7 +46,7 @@ class GetPetitions: BindableObject {
                 .eraseToAnyPublisher()  // cleans up the type signature of the property
             
             // Complete sink has two closures
-             let _ = remoteDataPublisher
+            let _ = remoteDataPublisher
                 .sink(receiveCompletion: { fini in
                     switch fini {
                     case .finished :

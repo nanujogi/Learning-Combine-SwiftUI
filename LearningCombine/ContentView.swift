@@ -21,6 +21,7 @@ struct ContentView : View {
                         NavigationLink(destination: Details(modelDetail: getp)) {
                             PetitionRow(p: getp)
                         }
+                        
                     }
                     .navigationBarTitle(Text("Petitions"))
                 } // end of NavigationView
