@@ -48,6 +48,10 @@ class CombinePattern: XCTestCase {
     
     func testSimpleURLDecodeChain() {
         // setup
+        guard let backgroundQueue = myBackgroundQueue else {
+                    XCTFail()
+                    return
+                }
         let expectation = XCTestExpectation(description: "Download from \(String(describing: testURL))")
         let remoteDataPublisher = URLSession.shared.dataTaskPublisher(for: self.testURL!)
             // the dataTaskPublisher output combination is (data: Data, response: URLResponse)
@@ -55,7 +59,7 @@ class CombinePattern: XCTestCase {
                 return inputTuple.data
             })
             .decode(type: Petitions.self, decoder: JSONDecoder())
-            .subscribe(on: self.myBackgroundQueue!)
+            .subscribe(on: backgroundQueue)
             .eraseToAnyPublisher()
         
         XCTAssertNotNil(remoteDataPublisher)
@@ -426,12 +430,11 @@ class CombinePattern: XCTestCase {
     
     // How to read detailDetail?
     // ❌ Beta 3 test will be successful but not able to read detailDetail its an failure
-    // ❌ Beta 4 test will be successful but no data is received
+    //  Beta 4 removed the html embedded data. Check testjsonhtmldecode below more information.
     
     func testJsonData() {
         
         let expectation = XCTestExpectation(description: "Data provided via jsondata")
-
         let jsondata = """
                 {
                 "id": 948783,
@@ -439,7 +442,7 @@ class CombinePattern: XCTestCase {
                 "off_percent": "",
                 "store": "Amazon",
                 "current_price": 0
-                    }
+                }
         """
 
         struct Hub: Codable {
@@ -457,6 +460,10 @@ class CombinePattern: XCTestCase {
 //                case dealDetail = "deal_detail"
             }
         }
+        guard let backgroundQueue = myBackgroundQueue else {
+                    XCTFail()
+                    return }
+        
         // setup Publisher is of type Data, Error
         let simpleControlledPublisher = PassthroughSubject<Data, Never>()
 
@@ -467,7 +474,9 @@ class CombinePattern: XCTestCase {
                 return Data(data)
             })
             .decode(type: Hub.self, decoder: JSONDecoder())
+            .subscribe(on: backgroundQueue)
             
+            // if we have any Publisher who's failure type is <Error> eg. PassthroughSubject<Data, Error> we can use .flatMap
             
 //            .flatMap { data in // takes a String in and returns a Publisher
 //                return Just(data)
@@ -517,7 +526,7 @@ class CombinePattern: XCTestCase {
         myTown.printDescription()
     }
     
-    // This is failing
+    // Success Works well for Xcode 11 beta 4
     func testjsonhtmldecode() {
 
         struct Models: Codable{
@@ -535,13 +544,26 @@ class CombinePattern: XCTestCase {
             }
         }
         // setup
+        // var myBackgroundQueue: DispatchQueue?
+        // self.myBackgroundQueue = DispatchQueue(label: "combineExamples")
+        
+        // var glURL: URL?
+        // let glURLString = "http://www.grenleaf.com/getjson.txt"
+        // glURL = URL(string: glURLString)
+        
+        guard let backgroundQueue = myBackgroundQueue else {
+            XCTFail()
+            return }
+        
         let expectation = XCTestExpectation(description: "Download from \(String(describing: glURL!))")
 
         let remoteDataPublisher = URLSession.shared.dataTaskPublisher(for: glURL!)
             // the dataTaskPublisher output combination is (data: Data, response: URLResponse)
             .map { $0.data}
             .decode(type: Models.self, decoder: JSONDecoder())
-            .subscribe(on: self.myBackgroundQueue!)
+            // tests fails if we don't add this line. So in beta 4
+            // .subscribe (on: someQueue) is required?. Not sure yet.
+            .subscribe(on: backgroundQueue)
             .eraseToAnyPublisher()
 
         // validate
@@ -564,6 +586,18 @@ class CombinePattern: XCTestCase {
             })
         
         wait(for: [expectation], timeout: 5.0)
+    }
+    
+    func testHelp() {
+        var sub:AnyCancellable  = URLSession.shared.dataTaskPublisher(for: URL(string: "https://www.example.com")!)
+                .tryMap { (data, resp) -> UIImage? in
+                    guard let image = UIImage(data: data) else { return nil }
+                    return image
+            }
+            .replaceError(with: UIImage())
+            .assign(to: \.image, on: UIImageView())
+            sub.cancel()
+        
     }
 }
 

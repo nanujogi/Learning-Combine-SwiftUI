@@ -17,11 +17,13 @@ struct Details : View {
             Text("Signature Count: \(modelDetail.signatureCount)")
             
             Button("Shows Alert") {
-                self.showsAlert = true
+                self.showsAlert.toggle()
             }
-            .presentation($showsAlert) {
+            .alert(isPresented: $showsAlert) {
                 Alert(title: Text(modelDetail.title), message: Text(modelDetail.body), dismissButton: .default(Text("Exit")))
+            
             }
+            .background(Color.blue)
             Spacer()
         }
     }
