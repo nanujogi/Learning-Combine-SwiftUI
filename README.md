@@ -16,3 +16,6 @@ App content & what it does.
 
 That's all it does. 
 Cheers!
+<p align="center">
+  <img width="320" height="693" src="http://www.grenleaf.com/learning-combine.jpg">
+</p>
