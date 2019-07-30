@@ -39,16 +39,17 @@ struct PetitionRow: View {
         VStack (alignment: .leading) {
             
             Text(p.title)
+                .lineLimit(1)
             
             Text(p.body)
                 .font(.subheadline)
                 .foregroundColor(Color.gray)
-                .lineLimit(2)
+                .lineLimit(1)
             
             Text(p.url)
-                .font(.system(size: 9))
+                .font(.system(size: 10))
                 .foregroundColor(Color.blue)
-                .lineLimit(1)
+                .lineLimit(nil)
         }
     }
 }
