@@ -8,7 +8,7 @@ import UIKit
 import SwiftUI
 import Combine
 
-class GetPetitions: BindableObject {
+class GetPetitions: ObservableObject {
     
     typealias PublisherType = PassthroughSubject<Void, Never>
     
@@ -18,11 +18,12 @@ class GetPetitions: BindableObject {
     // PassthroughSubject does not maintain any state, just passes through provided values.
     
     // models is an array of Petition
-    var models: [Petition] = []
+    @Published var models: [Petition] = []
     {
         didSet {
             //DispatchQueue.main.async {
-            self.willChange.send() // this send() call will send values to subscribers.
+            objectWillChange.send()
+//            self.willChange.send() // this send() call will send values to subscribers.
             //}
         }
     }

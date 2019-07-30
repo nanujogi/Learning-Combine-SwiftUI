@@ -21,14 +21,9 @@ struct Details : View {
             }
             .alert(isPresented: $showsAlert) {
                 Alert(title: Text(modelDetail.title), message: Text(modelDetail.body), dismissButton: .default(Text("Exit")))
-            
             }
-            .background(Color.blue)
+            .background(Color.white)
             Spacer()
         }
     }
 }
-
-
-
-

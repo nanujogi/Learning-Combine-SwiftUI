@@ -9,7 +9,7 @@ import Combine
 
 struct ContentView : View {
     
-    @ObjectBinding var store: GetPetitions
+    @ObservedObject var store: GetPetitions
     
     var body: some View {
         Group {
@@ -21,7 +21,6 @@ struct ContentView : View {
                         NavigationLink(destination: Details(modelDetail: getp)) {
                             PetitionRow(p: getp)
                         }
-                        
                     }
                     .navigationBarTitle(Text("Petitions"))
                 } // end of NavigationView
@@ -43,18 +42,15 @@ struct PetitionRow: View {
             
             Text(p.body)
                 .font(.subheadline)
-                .color(Color.gray)
+                .foregroundColor(Color.gray)
                 .lineLimit(2)
             
             Text(p.url)
                 .font(.system(size: 9))
                 .foregroundColor(Color.blue)
-                .lineLimit(nil)
-            
+                .lineLimit(1)
         }
     }
-    
-
 }
 
 struct LoadingView: UIViewRepresentable {
