@@ -208,7 +208,7 @@ class CombinePattern: XCTestCase {
     }
     
     func testCodes3() {
-        struct FormViewModel {
+        class FormViewModel {
             @Published var isSubmitAllowed: Bool = false
         }
         

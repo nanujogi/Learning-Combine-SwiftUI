@@ -3,8 +3,6 @@
 //  Created by Nanu Jogi on 03/07/19.
 //  Copyright © 2019 Greenleaf Software. All rights reserved.
 
-import Foundation
-import UIKit
 import SwiftUI
 import Combine
 
@@ -14,19 +12,8 @@ class GetPetitions: ObservableObject {
     
     let url = "https://api.whitehouse.gov/v1/petitions.json?limit=15"
     
-    var willChange  = PassthroughSubject<Void, Never>()
-    // PassthroughSubject does not maintain any state, just passes through provided values.
-    
     // models is an array of Petition
     @Published var models: [Petition] = []
-    {
-        didSet {
-            //DispatchQueue.main.async {
-            objectWillChange.send()
-//            self.willChange.send() // this send() call will send values to subscribers.
-            //}
-        }
-    }
     
     // fetch func will be used in .onAppear inside ContentView.swift
     func fetch() {
